@@ -64,17 +64,17 @@
     }
   } catch (e) { /* sem menu: a página continua navegável pelas âncoras */ }
 
-  // barra fixa do celular: aparece depois que o botão da capa sai da tela e some no bloco de contato
+  // barra fixa do celular: aparece quando o leitor chega ao Método (depois de ver quem atende e em quê) e some no bloco de contato
   try {
     var bar = document.getElementById('bar');
-    var heroCta = document.getElementById('hero-cta');
+    var heroCta = document.getElementById('metodo') || document.getElementById('hero-cta');
     var fim = document.querySelector('#contato .panel') || document.getElementById('contato') || document.querySelector('.ftr');
     if (bar && 'IntersectionObserver' in window) {
       var past = !heroCta, atEnd = false;
       var sync = function () { bar.classList.toggle('on', past && !atEnd); };
       if (heroCta) {
-        new IntersectionObserver(function (i) { past = !i[0].isIntersecting; sync(); },
-          { rootMargin: '-68px 0px 0px 0px' }).observe(heroCta);
+        new IntersectionObserver(function (i) { past = i[0].isIntersecting || i[0].boundingClientRect.top < 0; sync(); },
+          { rootMargin: '0px 0px -30% 0px' }).observe(heroCta);
       }
       if (fim) {
         new IntersectionObserver(function (i) { atEnd = i[0].isIntersecting; sync(); },
